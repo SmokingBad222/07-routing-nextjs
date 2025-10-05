@@ -27,7 +27,7 @@ export default function NotesClient({tag}: Props) {
       <NoteList notes={data?.notes || []} />
       <Pagination
       currentPage={page}
-      totalPages={data?.totalPages || 1}
+      pageCount={data?.totalPages || 1}
       onPageChange={setPage}
       />
     </div>
