@@ -1,80 +1,39 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery, useQueryClient} from '@tanstack/react-query';
-import { useDebounce } from 'use-debounce';
+import { useQuery} from '@tanstack/react-query';
 import { fetchNotes } from '@/lib/api';
-import type { FetchNotesResponse } from '@/lib/api';
-import SearchBox from '@/components/SearchBox/SearchBox';
 import Pagination from '@/components/Pagination/Pagination';
 import NoteList from '@/components/NoteList/NoteList';
-import NoteForm from '@/components/NoteForm/NoteForm';
-import Modal from '@/components/Modal/Modal';
 import css from './Notes.client.module.css';
 
-interface NotesClientProps {
-  tag?: string;
-}
+type Props = { tag: string};
 
-export default function NotesClient({tag}: NotesClientProps) {
+export default function NotesClient({tag}: Props) {
+
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const [debouncedSearch] = useDebounce(search, 500);
-  const queryClient = useQueryClient();
-
-  const { data, isLoading, isError, isFetching } = useQuery({
-    queryKey: ['notes', page, debouncedSearch],
-    queryFn: (): Promise<FetchNotesResponse> =>
-      fetchNotes({ page, perPage: 12, search: debouncedSearch, tag: tag || undefined }),
-   
+  
+  const { data, isLoading, isError} = useQuery({
+    queryKey: ['notes', page, tag],
+    queryFn: () => fetchNotes({ page, perPage: 12, search: tag }),
+    placeholderData: (prev) => prev,   
   });
 
-  const handleCreated = () => {
-    setIsOpen(false);
-    queryClient.invalidateQueries({ queryKey: ['notes'] });
-  };
-
-  const handleSearchChange = (value: string) => {
-    setSearch(value);
-    setPage(1);
-  };
+  if (isLoading) return <p>Loading...</p>
+  if (isError) return <p>Error loading notes.</p>
 
   return (
     <div className={css.container}>
-      <header className={css.toolbar}>
-        <SearchBox value={search} onChange={handleSearchChange} />
-        {(data?.totalPages ?? 0) > 1 && (
-          <Pagination
-            pageCount={data?.totalPages ?? 0}
-            currentPage={page}
-            onPageChange={setPage}
-          />
-        )}
-        <button className={css.button} onClick={() => setIsOpen(true)}>
-          Create note +
-        </button>
-      </header>
-
-      {isLoading && <p>Loading...</p>}
-      {isError && <p>Error loading notes</p>}
-      {data?.notes?.length ? (
-        <NoteList notes={data.notes} />
-      ) : (
-        !isLoading && <p>No notes found</p>
-      )}
-
-      {isFetching && !isLoading && <p>Updating…</p>}
-
-      {isOpen && (
-        <Modal onClose={() => setIsOpen(false)}>
-          <NoteForm onCreated={handleCreated} />
-        </Modal>
-      )}
+      <NoteList notes={data?.notes || []} />
+      <Pagination
+      currentPage={page}
+      totalPages={data?.totalPages || 1}
+      onPageChange={setPage}
+      />
     </div>
   );
 }
 
 
 
- placeholderData: (previous) => previous,  
+ 

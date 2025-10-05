@@ -26,14 +26,22 @@ export interface FetchNotesResponse {
 }
 
 
-export const fetchNotes = async (params: FetchNotesParams = {}): Promise<FetchNotesResponse> => {
-  const { data } = await api.get<FetchNotesResponse>('/notes', {
-    params,
-    headers: { 'Cache-Control': 'no-cache' },
-  });
+
+export const fetchNotes = async ({
+  page,
+  perPage,
+  search,
+}: {
+  page: number;
+  perPage: number;
+  search?: string;
+}): Promise<FetchNotesResponse> => {
+  const params: Record<string, string | number> = { page, perPage };
+  if (search) params.tag = search;
+
+  const { data } = await api.get<FetchNotesResponse>('/notes', { params });
   return data;
 };
-
 
 export const createNote = async (
   body: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>
@@ -43,35 +51,14 @@ export const createNote = async (
 };
 
 
-export const deleteNote = async (id: string): Promise<Note> => {  // 🔥 number → string
+export const deleteNote = async (id: string): Promise<Note> => {  
   const { data } = await api.delete<Note>(`/notes/${id}`);
   return data;
 };
 
 
-export const fetchNoteById = async (id: string): Promise<Note> => { // 🔥 number → string
+export const fetchNoteById = async (id: string): Promise<Note> => { 
   const { data } = await api.get<Note>(`/notes/${id}`);
   return data;
 };
 
-export type Category = {
-  id: number;
-  name: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-// export const getCategories = async (): Promise<Category[]> => {
-//   const { data } = await api.get<Category[]>('/categories', {
-//     headers: { 'Cache-Control': 'no-cache' },
-//   });
-//   return data;
-// };
-
-export const getNotes = async (categoryId?: string) => {
-  const res = await axios.get<NoteListResponse>('/notes', {
-    params: {categoryId}
-  });
-  return res.data;
-};
