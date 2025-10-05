@@ -14,9 +14,15 @@ export interface FetchNotesParams {
   search?: string;
 }
 
+export interface NoteListResponse {
+  search?: string;
+  categoryId: string;
+}
+
 export interface FetchNotesResponse {
   notes: Note[];
   totalPages: number;
+  
 }
 
 
@@ -48,3 +54,24 @@ export const fetchNoteById = async (id: string): Promise<Note> => { // 🔥 numb
   return data;
 };
 
+export type Category = {
+  id: number;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+// export const getCategories = async (): Promise<Category[]> => {
+//   const { data } = await api.get<Category[]>('/categories', {
+//     headers: { 'Cache-Control': 'no-cache' },
+//   });
+//   return data;
+// };
+
+export const getNotes = async (categoryId?: string) => {
+  const res = await axios.get<NoteListResponse>('/notes', {
+    params: {categoryId}
+  });
+  return res.data;
+};
