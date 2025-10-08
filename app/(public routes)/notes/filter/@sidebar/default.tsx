@@ -5,15 +5,20 @@ const tags = ['All', 'Work', 'Personal', 'Ideas', 'Other'];
 
 export default function SidebarNotes() {
     return (
+        <aside className={css.sidebar}>
         <ul className={css.menuList}>
             {tags.map((tag) => (
                 <li key={tag} className={css.menuItem}>
                     <Link
-                    href={tag === 'All' ? '/mote/filter/All' : `/notes/filter/${tag}`}
-                    >{tag}</Link>
+              href={`/notes/filter/${tag === "All" ? "" : tag}`}
+              className={css.menuLink}
+            >
+              {tag}
+            </Link>
                 </li>
             ))}
 
         </ul>
+        </aside>
     );
 }

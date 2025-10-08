@@ -1,18 +1,19 @@
-import LayoutNotes from "@/components/LayoutNotes/LayoutNotes";
 
-type Props = {
-  children: React.ReactNode;
-  sidebar?: React.ReactNode;
-};
+import { ReactNode } from "react";
+import Sidebar from "./@sidebar/default";
+import "../globals.css"; 
 
-export default function NotesLayout({
-  children,
-  sidebar,
-}: Props) {
+interface Props {
+  children: ReactNode;
+  sidebar?: ReactNode; 
+}
+
+export default function NotesFilterLayout({ children, sidebar }: Props) {
   return (
-    <LayoutNotes>
-      <aside>{sidebar}</aside>
-      <section>{children}</section>
-    </LayoutNotes>
+    <div style={{ display: "flex", gap: "1rem" }}>
+      
+      {sidebar || <Sidebar />}
+      <main style={{ flex: 1 }}>{children}</main>
+    </div>
   );
 }
