@@ -26,19 +26,15 @@ export interface FetchNotesResponse {
 }
 
 export const getNoteById = async (id: string): Promise<Note> => {
-  const { data } = await axios.get(`/notes/${id}`);
+  const { data } = await api.get<Note>(`/notes/${id}`);
   return data;
 };
 
 export const fetchNotes = async ({
-  page,
-  perPage,
-  search,
-}: {
-  page: number;
-  perPage: number;
-  search?: string;
-}): Promise<FetchNotesResponse> => {
+  page =1,
+  perPage = 12,
+  search = '',
+}: FetchNotesParams): Promise<FetchNotesResponse> => {
   const params: Record<string, string | number> = { page, perPage };
   if (search) params.tag = search;
 

@@ -6,6 +6,7 @@ import css from './NoteForm.module.css';
 
 interface NoteFormProps {
   onCreated: () => void;
+  onClose?: () => void;
 }
 
 interface FormValues {
