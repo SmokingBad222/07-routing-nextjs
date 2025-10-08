@@ -1,29 +1,41 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
-import { getNoteById } from '@/lib/api';
-import Modal from '@/components/Modal/Modal';
-import NotePreview from '@/components/NotePreview/NotePreview';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Modal from "@/app/@modal/default";
+import css from "./NotePreview.module.css";
 
-export default function NoteModalPage({ params }: { params: { id: string } }) {
+interface Note {
+  id: string;
+  title: string;
+  content: string;
+}
+
+interface Props {
+  note: Note;
+}
+
+export default function NotePreview({ note }: Props) {
   const router = useRouter();
-  const noteId = params.id;
-
-  const { data: note, isLoading, isError } = useQuery({
-    queryKey: ['note', noteId],
-    queryFn: () => getNoteById(noteId),
-  });
 
   const handleClose = () => router.back();
 
-  if (isLoading) return <Modal onClose={handleClose}>Loading...</Modal>;
-  if (isError || !note) return <Modal onClose={handleClose}>Note not found.</Modal>;
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleClose();
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, []);
 
   return (
     <Modal onClose={handleClose}>
-      <NotePreview note={note} />
+      <div className={css.noteContainer}>
+        <h2 className={css.title}>{note.title}</h2>
+        <p className={css.content}>{note.content}</p>
+      </div>
     </Modal>
   );
 }
+
 
