@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Modal from "@/app/@modal/default";
-import css from "./NotePreview.module.css";
+
 
 interface Note {
   id: string;
@@ -30,9 +30,9 @@ export default function NotePreview({ note }: Props) {
 
   return (
     <Modal onClose={handleClose}>
-      <div className={css.noteContainer}>
-        <h2 className={css.title}>{note.title}</h2>
-        <p className={css.content}>{note.content}</p>
+      <div>
+        <h2>{note.title}</h2>
+        <p>{note.content}</p>
       </div>
     </Modal>
   );
