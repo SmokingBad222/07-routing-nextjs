@@ -25,7 +25,10 @@ export interface FetchNotesResponse {
   
 }
 
-
+export const getNoteById = async (id: string): Promise<Note> => {
+  const { data } = await axios.get(`/notes/${id}`);
+  return data;
+};
 
 export const fetchNotes = async ({
   page,

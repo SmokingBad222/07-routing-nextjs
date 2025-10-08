@@ -1,34 +1,29 @@
 'use client';
-import type { ReactNode } from 'react';
-import { useEffect } from 'react';
-import { createPortal } from 'react-dom';
+
+import { ReactNode } from 'react';
 import css from './Modal.module.css';
 
 interface ModalProps {
-  children: ReactNode;
   onClose: () => void;
+  children: ReactNode;
 }
 
-export default function Modal({ children, onClose }: ModalProps) {
-  useEffect(() => {
-    const esc = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
-    window.addEventListener('keydown', esc);
-    document.body.style.overflow = 'hidden'; // ✅ блокування скролу
-
-    return () => {
-      window.removeEventListener('keydown', esc);
-      document.body.style.overflow = ''; // ✅ відновлення скролу
-    };
-  }, [onClose]);
-
-  return createPortal(
-    <div className={css.backdrop} onClick={onClose} role="dialog" aria-modal="true">
+export default function Modal({ onClose, children }: ModalProps) {
+  return (
+    <div className={css.backdrop} onClick={onClose}>
       <div className={css.modal} onClick={(e) => e.stopPropagation()}>
+        <button
+          className={css.closeBtn}
+          onClick={onClose}
+          aria-label="Close Modal"
+        >
+          &times;
+        </button>
         {children}
       </div>
-    </div>,
-    document.body
+    </div>
   );
 }
+
 
 
