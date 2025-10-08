@@ -1,7 +1,7 @@
 
 import { ReactNode } from "react";
 import Sidebar from "./@sidebar/default";
-import "../globals.css"; 
+
 
 interface Props {
   children: ReactNode;
