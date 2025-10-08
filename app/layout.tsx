@@ -5,19 +5,26 @@ import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 import TanStackProvider from '../components/TanStackProvider/TanStackProvider';
 
+
 export const metadata = {
   title: 'NoteHub',
   description: 'Notes app',
 };
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children, modal }: Readonly<{
+  children: ReactNode;
+  modal: ReactNode;
+ }>) {
   return (
     <html lang="en">
       <body>
         
         <TanStackProvider>
           <Header />
-          <main>{children}</main>
+          <main>
+            {children}
+            {modal}
+          </main>
           <Footer />
         </TanStackProvider>
       </body>

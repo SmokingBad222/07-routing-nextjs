@@ -1,13 +1,14 @@
 import LayoutNotes from "@/components/LayoutNotes/LayoutNotes";
 
+type Props = {
+  children: React.ReactNode;
+  sidebar: React.ReactNode;
+};
 
 export default function NotesLayout({
   children,
   sidebar,
-}: {
-  children: React.ReactNode;
-  sidebar?: React.ReactNode;
-}) {
+}: Props) {
   return (
     <LayoutNotes>
       <aside>{sidebar}</aside>
