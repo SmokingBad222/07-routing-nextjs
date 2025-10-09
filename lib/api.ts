@@ -15,29 +15,24 @@ export interface FetchNotesParams {
   search?: string;
 }
 
-export interface NoteListResponse {
-  search?: string;
-  categoryId: string;
-}
 
 export interface FetchNotesResponse {
   notes: Note[];
-  totalPages: number;
-  
+  page: number;
+  total: number;
 }
 
-export const getNoteById = async (id: string): Promise<Note> => {
+export const fetchNoteById = async (id: string): Promise<Note> => { 
   const { data } = await api.get<Note>(`/notes/${id}`);
   return data;
 };
 
 export const fetchNotes = async ({
   page =1,
-  perPage = 12,
   tag,
   search = '',
 }: FetchNotesParams): Promise<FetchNotesResponse> => {
-  const params: Record<string, string | number> = { page, perPage };
+  const params: Record<string, string | number> = { page};
   if (tag) params.tag = tag;
   if (search) params.search = search;
 
@@ -59,8 +54,4 @@ export const deleteNote = async (id: string): Promise<Note> => {
 };
 
 
-export const fetchNoteById = async (id: string): Promise<Note> => { 
-  const { data } = await api.get<Note>(`/notes/${id}`);
-  return data;
-};
 

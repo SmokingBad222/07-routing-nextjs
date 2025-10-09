@@ -9,15 +9,23 @@ import SearchBox from '@/components/SearchBox/SearchBox';
 import NoteList from '@/components/NoteList/NoteList';
 import NoteForm from '@/components/NoteForm/NoteForm';
 import Modal from '@/components/Modal/Modal';
+import Pagination from '@/components/Pagination/Pagination';
 
-export default function NotesClient({ slug }: { slug?: string[] }) {
+
+interface NotesClientProps {
+  slug?: string[];
+}
+
+export default function NotesClient({ slug }: NotesClientProps) {
+  const [page, setPage] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [page] = useState(1);
+
   const tag = slug?.[0] === 'All' ? undefined : slug?.[0];
 
   const debouncedSearch = useDebouncedCallback((value: string) => {
     setSearchTerm(value);
+    setPage(1);
   }, 500);
 
   
@@ -31,10 +39,11 @@ export default function NotesClient({ slug }: { slug?: string[] }) {
         search: searchTerm || undefined,
       }),
     
-    placeholderData: (prevData) => prevData,
+    placeholderData: (prev) => prev,
   });
 
   const notes = data?.notes ?? [];
+  const totalPages = Math.ceil((data?.total ?? 0) / 12);
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Failed to load notes</p>;
@@ -54,7 +63,14 @@ export default function NotesClient({ slug }: { slug?: string[] }) {
         </button>
       </div>
 
-      <NoteList notes={notes} />
+      {notes.length > 0 ? (
+        <>
+          <NoteList notes={notes} />
+          <Pagination currentPage={page} pageCount={totalPages} onPageChange={setPage} />
+        </>
+      ) : (
+        <p>No notes found</p>
+      )}
 
       {modalOpen && (
         <Modal onClose={() => setModalOpen(false)}>

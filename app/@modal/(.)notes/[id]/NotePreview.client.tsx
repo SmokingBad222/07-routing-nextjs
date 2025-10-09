@@ -21,7 +21,7 @@ export default function NotePreviewClient({ noteId }: { noteId: string }) {
   const { data: note, isLoading, isError } = useQuery<Note>({
     queryKey: ['note', noteId],
     queryFn: () => fetchNoteById(noteId),
-    refetchOnMount: 'always', 
+    refetchOnMount: false,
   });
 
   const handleClose = () => router.back();
