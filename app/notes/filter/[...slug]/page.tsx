@@ -23,7 +23,7 @@ export default async function FilteredNotesPage({ params }: Props) {
 
   return (
     <TanStackProvider dehydratedState={dehydrated}>
-      <NotesClient tag={tag} />
+      <NotesClient slug={[tag]} />
     </TanStackProvider>
   );
 }
