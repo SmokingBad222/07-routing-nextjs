@@ -18,7 +18,7 @@ export interface FetchNotesParams {
 
 export interface FetchNotesResponse {
   notes: Note[];
-  totalPage: number;
+  totalPages: number;
 }
 
 export const fetchNoteById = async (id: string): Promise<Note> => { 

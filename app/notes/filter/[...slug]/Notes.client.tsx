@@ -43,7 +43,8 @@ export default function NotesClient({ slug }: NotesClientProps) {
   });
 
   const notes = data?.notes ?? [];
-  const totalPages = Math.ceil((data?.total ?? 0) / 12);
+  const totalPages = data?.totalPages ?? 1;
+
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Failed to load notes</p>;
