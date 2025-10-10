@@ -9,12 +9,12 @@ const Header = async() => {
   
   return (
     <header className={css.header}>
-      <Link href="/" aria-label="Home">NoteHub</Link>
+      <Link className={css.headerLink} href="/" aria-label="Home">NoteHub</Link>
       <nav aria-label="Main Navigation">
         <ul className={css.navigation}>
-          <li><TagsMenu /></li>
-          <li><Link href="/profile">Profile</Link></li>
-          <li><Link href="/about">About</Link></li>
+          <li className={css.navigationItem}><TagsMenu /></li>
+          <li><Link className={css.navigationLink} href="/profile">Profile</Link></li>
+          <li><Link className={css.navigationLink} href="/about">About</Link></li>
         </ul>
       </nav>
     </header>

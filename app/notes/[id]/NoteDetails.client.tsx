@@ -2,6 +2,7 @@ import {   dehydrate, QueryClient } from '@tanstack/react-query';
 import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
 import { fetchNoteById } from '@/lib/api';
 import NoteDetailsClient from '@/components/NoteDetails/NoteDetails'; 
+import css from './NoteDetails.module.css'
 
 type Props = {
   params: Promise<{ id: string }>;
